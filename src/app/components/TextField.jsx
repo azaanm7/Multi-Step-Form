@@ -7,6 +7,7 @@ export const TextField = (props) => {
     error,
     type = "text",
     required = false,
+    onBlur,
   } = props;
   return (
     <div className="space-y-2">
@@ -19,6 +20,7 @@ export const TextField = (props) => {
         onChange={onChange}
         placeholder={placeholder}
         type={type}
+        onBlur={onBlur}
       />
       {error && <p className="text-sm text-[#E14942]">{error}</p>}
     </div>

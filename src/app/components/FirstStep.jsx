@@ -3,30 +3,64 @@ import { Logo } from "./Logo";
 import { TextField } from "./TextField";
 import { Button } from "./Button";
 
-export const FirstStep = ({ handleNextStep }) => {
+export const FirstStep = ({ handleNextStep, form, setForm }) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
+  const [errors, setErrors] = useState({
+    firstnameError: "",
+    lastnameError: "",
+    usernameError: "",
+  });
 
   const isFirstNameValid = () => {
-    if (firstname === "") return "First name cannot be empty...";
-    if (!/^[A-Za-z-]+$/.test(firstname))
-      return "First name cannot contain special characters or numbers.";
+    if (form.firstname.trim === "") return "First name cannot be empty...";
+    if (!/^[A-Z][a-z]+$/.test(form.firstname))
+      return setErrors({
+        ...errors,
+        firstnameError:
+          "First name cannot contain special characters or numbers.",
+      });
+    return "";
   };
   const isLastNameValid = () => {
-    if (lastname === "") return "First name cannot be empty...";
-    if (!/^[A-Za-z-]+$/.test(lastname))
-      return "Last name cannot contain special characters or numbers.";
+    if (form.lastname.trim === "")
+      return setErrors({
+        ...errors,
+        lastnameError: "First name cannot be empty...",
+      });
+    if (!/^[A-Z][a-z]+$/.test(form.lastname))
+      return setErrors({
+        ...errors,
+        lastnameError:
+          "Last name cannot contain special characters or numbers.",
+      });
   };
   const isUsernameValid = () => {
-    if (username === "") return "First name cannot be empty...";
-    if (!/^[a-z0-9-_.]+$/.test(username))
-      return "Username can only contain lowercase letters and digits only.";
+    if (form.username.trim === "")
+      return setErrors("First name cannot be empty...");
+    if (!/^[a-z0-9-_.]+$/.test(form.username))
+      return setErrors({
+        ...errors,
+        usernameError:
+          "Username can only contain lowercase letters and digits only.",
+      });
   };
 
   const isHavingError = () => {
     return isFirstNameValid() || isLastNameValid() || isUsernameValid();
   };
+
+  const handleFirsNameBlur = () => {
+    isFirstNameValid();
+  };
+  const handleLastNameBlur = () => {
+    isLastNameValid();
+  };
+  const handleUserNameBlur = () => {
+    isUsernameValid();
+  };
+
   return (
     <div className="w-120 min-h-[655px] bg-white rounded-lg p-8 ">
       <div className="space-y-2">
@@ -41,7 +75,7 @@ export const FirstStep = ({ handleNextStep }) => {
           onChange={(e) => {
             setFirstname(e.target.value);
           }}
-          error={isFirstNameValid()}
+          error={errors.isFirstNameValid}
           required={true}
           label="First name"
           placeholder="John..."
@@ -51,7 +85,7 @@ export const FirstStep = ({ handleNextStep }) => {
           onChange={(e) => {
             setLastname(e.target.value);
           }}
-          error={isLastNameValid()}
+          // error={isLastNameValid()}
           required={true}
           label="Last name"
           placeholder="Doe..."
@@ -61,7 +95,7 @@ export const FirstStep = ({ handleNextStep }) => {
           onChange={(e) => {
             setUsername(e.target.value);
           }}
-          error={isUsernameValid()}
+          // error={isUsernameValid()}
           required={true}
           label="Username"
           placeholder="john_doe123..."

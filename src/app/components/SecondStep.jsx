@@ -70,7 +70,7 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
           error={isPhoneNumberValid()}
           required={true}
           label="Phone number"
-          placeholder="Doe..."
+          placeholder="88888888"
         />
         <TextField
           value={password}
@@ -80,7 +80,7 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
           error={isPasswordValid()}
           required={true}
           label="Password"
-          placeholder="john_doe123..."
+          placeholder="@John123*"
         />
         <TextField
           value={confirmPassword}
@@ -90,11 +90,11 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
           error={isConfirmPasswordValid()}
           required={true}
           label="Confirm password"
-          placeholder="john_doe123..."
+          placeholder="@John123*"
         />
       </div>
       <div className="flex gap-4 my-10">
-        <Button onClick={handlePrevStep}>Continue 1/3</Button>
+        <Button onClick={handlePrevStep}>Back</Button>
         <Button onClick={handleNextStep} disabled={isHavingError()}>
           Continue 1/3
         </Button>
