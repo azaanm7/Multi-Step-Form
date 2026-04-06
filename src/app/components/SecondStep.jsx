@@ -3,36 +3,47 @@ import { Logo } from "./Logo";
 import { TextField } from "./TextField";
 import { Button } from "./Button";
 
-export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+export const SecondStep = ({
+  handleNextStep,
+  handlePrevStep,
+  form,
+  setForm,
+}) => {
   const isEmailValid = () => {
-    if (email === "") return "Email address is required";
-    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email))
+    if (form.email === "") return "Email address is required";
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email))
       return "Please provide a valid email address.";
   };
   const isPhoneNumberValid = () => {
-    if (phoneNumber === "") return "Phone number is required.";
-    if (!/^[0-9]+$/.test(phoneNumber))
-      return "Phone number is must contain only digits.";
-    if (!/^[A-Za-z-]+$/.test(phoneNumber))
+    if (form.phoneNumber.trim() === "") return "Phone number is required.";
+    if (form.phoneNumber.length !== 8) {
+      return "Phone number must be exactly 8 digits";
+    }
+    if (!/^[0-9]+$/.test(form.phoneNumber)) {
       return "Phone number must contain only digits.";
+    }
   };
   const isPasswordValid = () => {
-    if (password === "") return "Password is required.";
-    if (password.length < 8)
-      return "Password must be at least 8 characters long for your security.";
-    if (!/^[a-z0-9-_.]+$/.test(password))
-      return "Password should include at least one letter and one number.";
+    if (form.password.trim() === "") return "Password is required.";
+    if (form.password.length < 8)
+      return "Password must be at least 8 characters long.";
+    if (!/[a-zA-Z]/.test(form.password))
+      return "Password must include at least one letter.";
+    if (!/[0-9]/.test(form.password)) {
+      return "Password must include at least one number.";
+    }
+    if (!/[!@#$%^&*]/.test(form.password)) {
+      return "Password must include at least one special character.";
+    }
   };
 
   const isConfirmPasswordValid = () => {
-    if (confirmPassword === "") return "Please confirm your password.";
-    if (!/^[a-z0-9-_.]+$/.test(confirmPassword))
+    if (form.confirmPassword.trim() === "")
+      return "Please confirm your password.";
+    if (form.confirmPassword !== form.password) {
       return "Passwords do not match. Please try again.";
+    }
+    return "";
   };
 
   const isHavingError = () => {
@@ -44,7 +55,7 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
     );
   };
   return (
-    <div className="w-120 min-h-[655px] bg-white rounded-lg p-8 ">
+    <div className="space-y-4">
       <div className="space-y-2">
         <Logo />
         <h1 className="font-semibold text-2xl text-[#202124]">Join Us! 😎</h1>
@@ -53,9 +64,9 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
         </p>
 
         <TextField
-          value={email}
+          value={form.email}
           onChange={(e) => {
-            setEmail(e.target.value);
+            setForm({ ...form, email: e.target.value });
           }}
           error={isEmailValid()}
           required={true}
@@ -63,9 +74,9 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
           placeholder="john.doe@gmail.com"
         />
         <TextField
-          value={phoneNumber}
+          value={form.phoneNumber}
           onChange={(e) => {
-            setPhoneNumber(e.target.value);
+            setForm({ ...form, phoneNumber: e.target.value });
           }}
           error={isPhoneNumberValid()}
           required={true}
@@ -73,24 +84,26 @@ export const SecondStep = ({ handleNextStep, handlePrevStep }) => {
           placeholder="88888888"
         />
         <TextField
-          value={password}
+          value={form.password}
           onChange={(e) => {
-            setPassword(e.target.value);
+            setForm({ ...form, password: e.target.value });
           }}
           error={isPasswordValid()}
           required={true}
           label="Password"
-          placeholder="@John123*"
+          type="password"
+          placeholder="********"
         />
         <TextField
-          value={confirmPassword}
+          value={form.confirmPassword}
           onChange={(e) => {
-            setConfirmPassword(e.target.value);
+            setForm({ ...form, confirmPassword: e.target.value });
           }}
           error={isConfirmPasswordValid()}
           required={true}
           label="Confirm password"
-          placeholder="@John123*"
+          type="password"
+          placeholder="********"
         />
       </div>
       <div className="flex gap-4 my-10">
