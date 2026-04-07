@@ -8,6 +8,8 @@ export const SecondStep = ({
   handlePrevStep,
   form,
   setForm,
+  errors,
+  setErrors,
 }) => {
   const isEmailValid = () => {
     if (form.email === "") return "Email address is required";
@@ -55,62 +57,87 @@ export const SecondStep = ({
     );
   };
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Logo />
-        <h1 className="font-semibold text-2xl text-[#202124]">Join Us! 😎</h1>
-        <p className="text-lg text-[#8E8E8E]">
-          Please provide all current information accurately.
-        </p>
+    <div className="flex flex-col h-full">
+      <div className="space-y-4 flex flex-col h-full justify-between">
+        <div className="space-y-2">
+          <Logo />
+          <h1 className="font-semibold text-2xl text-[#202124]">Join Us! 😎</h1>
+          <p className="text-lg text-[#8E8E8E]">
+            Please provide all current information accurately.
+          </p>
 
-        <TextField
-          value={form.email}
-          onChange={(e) => {
-            setForm({ ...form, email: e.target.value });
-          }}
-          error={isEmailValid()}
-          required={true}
-          label="Email"
-          placeholder="john.doe@gmail.com"
-        />
-        <TextField
-          value={form.phoneNumber}
-          onChange={(e) => {
-            setForm({ ...form, phoneNumber: e.target.value });
-          }}
-          error={isPhoneNumberValid()}
-          required={true}
-          label="Phone number"
-          placeholder="88888888"
-        />
-        <TextField
-          value={form.password}
-          onChange={(e) => {
-            setForm({ ...form, password: e.target.value });
-          }}
-          error={isPasswordValid()}
-          required={true}
-          label="Password"
-          type="password"
-          placeholder="********"
-        />
-        <TextField
-          value={form.confirmPassword}
-          onChange={(e) => {
-            setForm({ ...form, confirmPassword: e.target.value });
-          }}
-          error={isConfirmPasswordValid()}
-          required={true}
-          label="Confirm password"
-          type="password"
-          placeholder="********"
-        />
-      </div>
-      <div className="flex gap-4 my-10">
-        <Button onClick={handlePrevStep}>Back</Button>
-        <Button onClick={handleNextStep} disabled={isHavingError()}>
-          Continue 1/3
-        </Button>
+          <TextField
+            value={form.email}
+            onChange={(e) => {
+              setForm({ ...form, email: e.target.value });
+              setErrors({ ...errors, email: isEmailValid(e.target.value) });
+            }}
+            error={isEmailValid()}
+            required={true}
+            label="Email"
+            placeholder="john.doe@gmail.com"
+          />
+          <TextField
+            value={form.phoneNumber}
+            onChange={(e) => {
+              setForm({ ...form, phoneNumber: e.target.value });
+              setErrors({
+                ...errors,
+                phoneNumber: isPhoneNumberValid(e.target.value),
+              });
+            }}
+            error={isPhoneNumberValid()}
+            required={true}
+            label="Phone number"
+            placeholder="88888888"
+          />
+          <TextField
+            value={form.password}
+            onChange={(e) => {
+              setForm({ ...form, password: e.target.value });
+              setErrors({
+                ...errors,
+                password: isPasswordValid(e.target.value),
+              });
+            }}
+            error={isPasswordValid()}
+            required={true}
+            label="Password"
+            type="password"
+            placeholder="********"
+          />
+          <TextField
+            value={form.confirmPassword}
+            onChange={(e) => {
+              setForm({ ...form, confirmPassword: e.target.value });
+              setErrors({
+                ...errors,
+                confirmPassword: isConfirmPasswordValid(e.target.value),
+              });
+            }}
+            error={isConfirmPasswordValid()}
+            required={true}
+            label="Confirm password"
+            type="password"
+            placeholder="********"
+          />
+        </div>
+        <div className="flex gap-2">
+          <Button
+            onClick={handlePrevStep}
+            className="w-32 h-11 py-2.5 px-3 flex items-center justify-center gap-1 border border-[#CBD5E1] bg-white text-black"
+          >
+            <img src="./chevron_left.svg" alt="" className="w-6 h-6" /> Back
+          </Button>
+          <Button
+            onClick={handleNextStep}
+            disabled={isHavingError()}
+            className="w-70 h-11 py-2.5 px-3 flex items-center justify-center gap-1 bg-[#202124] text-white"
+          >
+            Continue 2/3{" "}
+            <img src="./chevron_right.svg" alt="" className="w-6 h-6" />
+          </Button>
+        </div>
       </div>
     </div>
   );

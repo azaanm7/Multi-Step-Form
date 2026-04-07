@@ -3,9 +3,11 @@ import { useState } from "react";
 import { FirstStep } from "./components/FirstStep";
 import { SecondStep } from "./components/SecondStep";
 import { ThirdStep } from "./components/ThirdStep";
+import { FourthStep } from "./components/FourthStep";
 
 export default function Home() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
+
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
@@ -21,8 +23,12 @@ export default function Home() {
     firstname: "",
     lastname: "",
     username: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
   });
-  const steps = [FirstStep, SecondStep, ThirdStep];
+  const steps = [FirstStep, SecondStep, ThirdStep, FourthStep];
   const StepForm = steps[step];
 
   const handleNextStep = () => {
@@ -33,7 +39,7 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-[#f4f4f4] font-sans">
+    <div className="w-full h-screen flex justify-center items-center bg-[#f4f4f4] font-sans flex-col">
       <div className="w-120 min-h-[655px] bg-white rounded-lg p-8 ">
         <StepForm
           errors={errors}

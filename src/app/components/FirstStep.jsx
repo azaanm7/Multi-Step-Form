@@ -15,13 +15,13 @@ export const FirstStep = ({
     if (!/^[A-Z][a-z]+$/.test(value))
       return "First name cannot contain special characters or numbers.";
   };
-  const isLastNameValid = () => {
-    if (form.lastname.trim() === "") return "First name cannot be empty...";
+  const isLastNameValid = (value) => {
+    if (value === "") return "First name cannot be empty...";
     if (!/^[A-Z][a-z]+$/.test(form.lastname))
       return "Last name cannot contain special characters or numbers.";
   };
-  const isUsernameValid = () => {
-    if (form.username.trim() === "") return "First name cannot be empty...";
+  const isUsernameValid = (value) => {
+    if (value === "") return "First name cannot be empty...";
     if (!/^[a-z0-9-_.]+$/.test(form.username))
       return "Username can only contain lowercase letters and digits only.";
   };
@@ -32,70 +32,69 @@ export const FirstStep = ({
     );
   };
 
-  const handleFirstNameBlur = () => {
-    isFirstNameValid();
-  };
-  const handleLastNameBlur = () => {
-    isLastNameValid();
-  };
-  const handleUserNameBlur = () => {
-    isUsernameValid();
-  };
-
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Logo />
-        <h1 className="font-semibold text-2xl text-[#202124] ">Join Us! 😎</h1>
-        <p className="text-lg text-[#8E8E8E]">
-          Please provide all current information accurately.
-        </p>
+    <div className="flex flex-col  h-full">
+      <div className="space-y-4 flex flex-col h-full justify-between">
+        <div className=" space-y-2">
+          <Logo />
+          <h1 className="font-semibold text-2xl text-[#202124] ">
+            Join Us! 😎
+          </h1>
+          <p className="text-lg text-[#8E8E8E]">
+            Please provide all current information accurately.
+          </p>
 
-        <TextField
-          value={form.firstname}
-          onChange={(e) => {
-            setErrors({
-              ...errors,
-              firstname: isFirstNameValid(e.target.value),
-            });
-            setForm({ ...form, firstname: e.target.value });
-          }}
-          error={errors.firstname}
-          onBlur={handleFirstNameBlur(form.firstname)}
-          required={true}
-          label="First name"
-          placeholder="John..."
-        />
-        <TextField
-          value={form.lastname}
-          onChange={(e) => {
-            setForm({ ...form, lastname: e.target.value });
-          }}
-          error={isLastNameValid()}
-          onBlur={handleLastNameBlur(form.lastname)}
-          required={true}
-          label="Last name"
-          placeholder="Doe..."
-        />
-        <TextField
-          value={form.username}
-          onChange={(e) => {
-            setForm({ ...form, username: e.target.value });
-          }}
-          error={isUsernameValid()}
-          onBlur={handleUserNameBlur(form.username)}
-          required={true}
-          label="Username"
-          placeholder="john_doe123..."
-        />
-      </div>
-      <div className="flex gap-4 my-10">
+          <TextField
+            value={form.firstname}
+            onChange={(e) => {
+              setForm({ ...form, firstname: e.target.value });
+              setErrors({
+                ...errors,
+                firstname: isFirstNameValid(e.target.value),
+              });
+            }}
+            error={errors.firstname}
+            required={true}
+            label="First name"
+            placeholder="John..."
+          />
+          <TextField
+            value={form.lastname}
+            onChange={(e) => {
+              setForm({ ...form, lastname: e.target.value });
+              setErrors({
+                ...errors,
+                lastname: isLastNameValid(e.target.value),
+              });
+            }}
+            error={isLastNameValid()}
+            required={true}
+            label="Last name"
+            placeholder="Doe..."
+          />
+          <TextField
+            value={form.username}
+            onChange={(e) => {
+              setForm({ ...form, username: e.target.value });
+              setErrors({
+                ...errors,
+                username: isUsernameValid(e.target.value),
+              });
+            }}
+            error={isUsernameValid()}
+            required={true}
+            label="Username"
+            placeholder="john_doe123..."
+          />
+        </div>
+
         <Button
-          className="text-base"
           onClick={handleNextStep}
           disabled={isHavingError()}
+          className="w-full h-11 py-2.5 px-3 flex items-center justify-center gap-1 bg-[#202124] text-white"
         >
-          Continue 1/3 <img src="./chevron_right.svg" alt="" />
+          Continue 2/3{" "}
+          <img src="./chevron_right.svg" alt="" className="w-6 h-6" />
         </Button>
       </div>
     </div>
