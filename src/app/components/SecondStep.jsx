@@ -11,50 +11,54 @@ export const SecondStep = ({
   errors,
   setErrors,
 }) => {
-  const isEmailValid = () => {
-    if (form.email === "") return "Email address is required";
-    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email))
+  const isEmailValid = (value) => {
+    if (!value || value.trim() === "") return "Email address is required";
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value))
       return "Please provide a valid email address.";
+    return "";
   };
-  const isPhoneNumberValid = () => {
-    if (form.phoneNumber.trim() === "") return "Phone number is required.";
-    if (form.phoneNumber.length !== 8) {
-      return "Phone number must be exactly 8 digits";
-    }
-    if (!/^[0-9]+$/.test(form.phoneNumber)) {
+  const isPhoneNumberValid = (value) => {
+    if (value.trim() === "") return "Phone number is required.";
+    if (value.length !== 8) return "Phone number must be exactly 8 digits";
+    if (!/^[0-9]+$/.test(value))
       return "Phone number must contain only digits.";
-    }
+    return "";
   };
-  const isPasswordValid = () => {
-    if (form.password.trim() === "") return "Password is required.";
-    if (form.password.length < 8)
-      return "Password must be at least 8 characters long.";
-    if (!/[a-zA-Z]/.test(form.password))
+  const isPasswordValid = (value) => {
+    if (!value || value.trim() === "") return "Password is required.";
+    if (value.length < 8) return "Password must be at least 8 characters long.";
+    if (!/[a-zA-Z]/.test(value))
       return "Password must include at least one letter.";
-    if (!/[0-9]/.test(form.password)) {
+    if (!/[0-9]/.test(value))
       return "Password must include at least one number.";
-    }
-    if (!/[!@#$%^&*]/.test(form.password)) {
-      return "Password must include at least one special character.";
-    }
-  };
 
-  const isConfirmPasswordValid = () => {
-    if (form.confirmPassword.trim() === "")
-      return "Please confirm your password.";
-    if (form.confirmPassword !== form.password) {
-      return "Passwords do not match. Please try again.";
-    }
+    if (!/[!@#$%^&*]/.test(value))
+      return "Password must include at least one special character.";
     return "";
   };
 
-  const isHavingError = () => {
-    return (
-      isEmailValid() ||
-      isPhoneNumberValid() ||
-      isPasswordValid() ||
-      isConfirmPasswordValid()
-    );
+  const isConfirmPasswordValid = (value) => {
+    if (!value || value.trim() === "") return "Please confirm your password.";
+    if (value !== form.password)
+      return "Passwords do not match. Please try again.";
+    return "";
+  };
+
+  const handleNextClick = () => {
+    const emailErr = isEmailValid(form.email) || "";
+    const phoneErr = isPhoneNumberValid(form.phoneNumber) || "";
+    const passErr = isPasswordValid(form.password) || "";
+    const confirmpassErr = isConfirmPasswordValid(form.confirmPassword) || "";
+
+    setErrors({
+      email: emailErr,
+      phoneNumber: phoneErr,
+      password: passErr,
+      confirmPassword: confirmpassErr,
+    });
+    if (!emailErr && !phoneErr && !passErr && !confirmpassErr) {
+      handleNextStep();
+    }
   };
   return (
     <div className="flex flex-col h-full">
@@ -72,7 +76,7 @@ export const SecondStep = ({
               setForm({ ...form, email: e.target.value });
               setErrors({ ...errors, email: isEmailValid(e.target.value) });
             }}
-            error={isEmailValid()}
+            error={form.email ? isEmailValid(form.email) : ""}
             required={true}
             label="Email"
             placeholder="john.doe@gmail.com"
@@ -80,13 +84,13 @@ export const SecondStep = ({
           <TextField
             value={form.phoneNumber}
             onChange={(e) => {
-              setForm({ ...form, phoneNumber: e.target.value });
+              const val = setForm({ ...form, phoneNumber: e.target.value });
               setErrors({
                 ...errors,
                 phoneNumber: isPhoneNumberValid(e.target.value),
               });
             }}
-            error={isPhoneNumberValid()}
+            error={errors.phoneNumber}
             required={true}
             label="Phone number"
             placeholder="88888888"
@@ -100,7 +104,7 @@ export const SecondStep = ({
                 password: isPasswordValid(e.target.value),
               });
             }}
-            error={isPasswordValid()}
+            error={errors.password}
             required={true}
             label="Password"
             type="password"
@@ -115,7 +119,7 @@ export const SecondStep = ({
                 confirmPassword: isConfirmPasswordValid(e.target.value),
               });
             }}
-            error={isConfirmPasswordValid()}
+            error={errors.confirmPassword}
             required={true}
             label="Confirm password"
             type="password"
@@ -130,8 +134,7 @@ export const SecondStep = ({
             <img src="./chevron_left.svg" alt="" className="w-6 h-6" /> Back
           </Button>
           <Button
-            onClick={handleNextStep}
-            disabled={isHavingError()}
+            onClick={handleNextClick}
             className="w-70 h-11 py-2.5 px-3 flex items-center justify-center gap-1 bg-[#202124] text-white"
           >
             Continue 2/3{" "}

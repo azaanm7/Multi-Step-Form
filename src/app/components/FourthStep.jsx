@@ -4,12 +4,7 @@ import { TextField } from "./TextField";
 import { Button } from "./Button";
 import { ImageField } from "./ImageField";
 
-export const FourthStep = ({
-  handleNextStep,
-  handlePrevStep,
-  form,
-  setForm,
-}) => {
+export const FourthStep = () => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">

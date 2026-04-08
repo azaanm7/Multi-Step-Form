@@ -11,27 +11,35 @@ export const FirstStep = ({
   setErrors,
 }) => {
   const isFirstNameValid = (value) => {
-    if (value === "") return "First name cannot be empty...";
+    if (value.trim() === "") return "First name cannot be empty...";
     if (!/^[A-Z][a-z]+$/.test(value))
       return "First name cannot contain special characters or numbers.";
   };
   const isLastNameValid = (value) => {
-    if (value === "") return "First name cannot be empty...";
-    if (!/^[A-Z][a-z]+$/.test(form.lastname))
+    if (value.trim() === "") return "First name cannot be empty...";
+    if (!/^[A-Z][a-z]+$/.test(value))
       return "Last name cannot contain special characters or numbers.";
   };
   const isUsernameValid = (value) => {
-    if (value === "") return "First name cannot be empty...";
-    if (!/^[a-z0-9-_.]+$/.test(form.username))
+    if (value.trim() === "") return "First name cannot be empty...";
+    if (!/^[a-z0-9-_.]+$/.test(value))
       return "Username can only contain lowercase letters and digits only.";
   };
 
-  const isHavingError = () => {
-    return (
-      isFirstNameValid(form.firstname) || isLastNameValid() || isUsernameValid()
-    );
-  };
+  const handleNextClick = () => {
+    const firstErr = isFirstNameValid(form.firstname) || "";
+    const lastErr = isLastNameValid(form.lastname) || "";
+    const userErr = isUsernameValid(form.username) || "";
 
+    setErrors({
+      firstname: firstErr,
+      lastname: lastErr,
+      username: userErr,
+    });
+    if (!firstErr && !lastErr && !userErr) {
+      handleNextStep();
+    }
+  };
   return (
     <div className="flex flex-col  h-full">
       <div className="space-y-4 flex flex-col h-full justify-between">
@@ -67,7 +75,7 @@ export const FirstStep = ({
                 lastname: isLastNameValid(e.target.value),
               });
             }}
-            error={isLastNameValid()}
+            error={errors.lastname}
             required={true}
             label="Last name"
             placeholder="Doe..."
@@ -81,7 +89,7 @@ export const FirstStep = ({
                 username: isUsernameValid(e.target.value),
               });
             }}
-            error={isUsernameValid()}
+            error={errors.username}
             required={true}
             label="Username"
             placeholder="john_doe123..."
@@ -89,11 +97,10 @@ export const FirstStep = ({
         </div>
 
         <Button
-          onClick={handleNextStep}
-          disabled={isHavingError()}
+          onClick={handleNextClick}
           className="w-full h-11 py-2.5 px-3 flex items-center justify-center gap-1 bg-[#202124] text-white"
         >
-          Continue 2/3{" "}
+          Continue 1/3{" "}
           <img src="./chevron_right.svg" alt="" className="w-6 h-6" />
         </Button>
       </div>
