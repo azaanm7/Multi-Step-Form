@@ -6,7 +6,7 @@ import { ThirdStep } from "./components/ThirdStep";
 import { FourthStep } from "./components/FourthStep";
 
 export default function Home() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(0);
 
   const [form, setForm] = useState(null);
   const [errors, setErrors] = useState({
