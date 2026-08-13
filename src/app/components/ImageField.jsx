@@ -7,7 +7,7 @@ export const ImageField = (props) => {
     error,
 
     required = false,
-    onBlur,
+
     onCancel,
   } = props;
   return (
